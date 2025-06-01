@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ashish Newar - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,12 +14,59 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-font: 'Space Grotesk', sans-serif;
+            --secondary-font: 'Poppins', sans-serif;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: var(--secondary-font);
             background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
             color: white;
             overflow-x: hidden;
             scroll-behavior: smooth;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0c0c0c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: loaderFadeOut 1s ease-in-out forwards;
+            animation-delay: 2s;
+        }
+
+        .loader-text {
+            font-family: var(--primary-font);
+            font-size: 2rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes loaderFadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes pulse {
+            50% { transform: scale(1.1); }
         }
 
         /* Animated Background */
@@ -33,12 +83,6 @@
             animation: bgShift 20s ease-in-out infinite;
         }
 
-        @keyframes bgShift {
-            0%, 100% { transform: translateX(0px) translateY(0px); }
-            33% { transform: translateX(30px) translateY(-30px); }
-            66% { transform: translateX(-20px) translateY(20px); }
-        }
-
         /* Glass morphism containers */
         .glass {
             background: rgba(255, 255, 255, 0.05);
@@ -46,7 +90,7 @@
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass:hover {
@@ -62,6 +106,13 @@
             right: 20px;
             z-index: 1000;
             padding: 15px 30px;
+            transform: translateY(-100px);
+            animation: slideDown 0.8s ease forwards;
+            animation-delay: 2.5s;
+        }
+
+        @keyframes slideDown {
+            to { transform: translateY(0); }
         }
 
         nav a {
@@ -72,6 +123,25 @@
             border-radius: 25px;
             transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.1);
+            font-family: var(--primary-font);
+            font-weight: 500;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        nav a:hover::after {
+            width: 80%;
         }
 
         nav a:hover {
@@ -92,23 +162,42 @@
         .hero-content {
             text-align: center;
             z-index: 10;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 3s;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-family: var(--primary-font);
+            font-size: 4.5rem;
             margin-bottom: 20px;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
             background-size: 400% 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradientShift 4s ease-in-out infinite;
+            letter-spacing: -1px;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .hero-subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin: 30px 0;
+            max-width: 600px;
+            margin: 20px auto;
+            line-height: 1.6;
+            color: #e0e0e0;
         }
 
+        /* Role Animation */
         .role-container {
             margin: 30px 0;
             height: 60px;
@@ -118,76 +207,67 @@
         }
 
         .role-text {
-            font-size: 2rem;
-            font-weight: 300;
+            font-family: var(--primary-font);
+            font-size: 2.2rem;
+            font-weight: 500;
             color: #4ecdc4;
             opacity: 0;
             animation: typewriter 6s steps(20) infinite;
+            position: relative;
         }
 
-        @keyframes typewriter {
-            0%, 30% { opacity: 1; }
-            33%, 100% { opacity: 0; }
+        .role-text::after {
+            content: '|';
+            animation: blink 1s infinite;
         }
 
-        .role-text:nth-child(2) { animation-delay: 2s; }
-        .role-text:nth-child(3) { animation-delay: 4s; }
-
-        /* Floating 3D Elements */
-        .floating-element {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(45deg, rgba(255, 107, 107, 0.3), rgba(78, 205, 196, 0.3));
-            border-radius: 20px;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .floating-element:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-element:nth-child(2) {
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .floating-element:nth-child(3) {
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotateZ(0deg); }
-            50% { transform: translateY(-30px) rotateZ(180deg); }
+        @keyframes blink {
+            50% { opacity: 0; }
         }
 
         /* Sections */
         .section {
-            padding: 100px 50px;
+            padding: 120px 50px;
             max-width: 1200px;
             margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section h2 {
-            font-size: 3rem;
+            font-family: var(--primary-font);
+            font-size: 3.2rem;
             margin-bottom: 50px;
             text-align: center;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
         }
 
         /* About Section */
         .about-content {
-            padding: 40px;
+            padding: 60px;
             text-align: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             line-height: 1.8;
+            position: relative;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+            color: #e0e0e0;
+        }
+
+        .highlight {
+            color: #4ecdc4;
+            font-weight: 500;
         }
 
         /* Works Grid */
@@ -199,31 +279,22 @@
         }
 
         .work-card {
-            padding: 30px;
-            transition: all 0.3s ease;
+            padding: 40px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .work-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: all 0.5s ease;
-        }
-
-        .work-card:hover::before {
-            left: 100%;
-        }
-
         .work-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+            font-family: var(--primary-font);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
             color: #4ecdc4;
+        }
+
+        .work-card p {
+            line-height: 1.7;
+            color: #e0e0e0;
         }
 
         /* Projects Grid */
@@ -235,42 +306,51 @@
         }
 
         .project-card {
-            padding: 30px;
+            padding: 40px;
             position: relative;
             transform-style: preserve-3d;
-            transition: all 0.5s ease;
-        }
-
-        .project-card:hover {
-            transform: rotateY(10deg) rotateX(5deg) translateZ(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .project-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-family: var(--primary-font);
+            font-size: 2rem;
+            margin-bottom: 20px;
             color: #ff6b6b;
         }
 
-        .project-card .tech-stack {
+        .project-card p {
+            line-height: 1.7;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .tech-stack {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 20px;
         }
 
         .tech-tag {
-            background: rgba(78, 205, 196, 0.3);
-            padding: 5px 12px;
-            border-radius: 15px;
+            background: rgba(78, 205, 196, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 0.9rem;
             border: 1px solid rgba(78, 205, 196, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .tech-tag:hover {
+            background: rgba(78, 205, 196, 0.3);
+            transform: translateY(-2px);
         }
 
         /* Gallery */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            gap: 25px;
             margin-top: 50px;
         }
 
@@ -283,7 +363,7 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
 
@@ -297,24 +377,33 @@
             font-size: 3rem;
             position: absolute;
             z-index: 2;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover::before {
+            transform: scale(1.2);
+            opacity: 1;
         }
 
         .gallery-item::after {
             content: attr(data-title);
             position: absolute;
-            bottom: 10px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
             opacity: 0;
             transition: all 0.3s ease;
+            font-family: var(--primary-font);
         }
 
         .gallery-item:hover::after {
             opacity: 1;
+            bottom: 30px;
         }
 
         /* Contact Section */
@@ -326,19 +415,32 @@
         }
 
         .contact-card {
-            padding: 30px;
+            padding: 40px;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .contact-card:hover {
-            transform: translateY(-10px) scale(1.05);
+            transform: translateY(-15px) scale(1.05);
         }
 
         .contact-card .icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 3.5rem;
+            margin-bottom: 25px;
             display: block;
+            opacity: 0.9;
+        }
+
+        .contact-card h3 {
+            font-family: var(--primary-font);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #4ecdc4;
+        }
+
+        .contact-card p {
+            color: #e0e0e0;
+            font-size: 1.1rem;
         }
 
         /* Scroll indicator */
@@ -352,16 +454,53 @@
             transition: width 0.3s ease;
         }
 
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-outline {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ecdc4;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(78, 205, 196, 0.5);
+            transition: all 0.2s ease-out;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .role-text { font-size: 1.5rem; }
-            .section { padding: 50px 20px; }
-            .section h2 { font-size: 2rem; }
+            .hero h1 { font-size: 3rem; }
+            .role-text { font-size: 1.8rem; }
+            .section { padding: 80px 20px; }
+            .section h2 { font-size: 2.5rem; }
+            .about-content { padding: 30px; }
+            nav { padding: 10px 20px; }
+            nav a { margin: 0 8px; padding: 6px 12px; }
+            .cursor-dot, .cursor-outline { display: none; }
         }
     </style>
 </head>
 <body>
+    <div class="loader">
+        <div class="loader-text">Welcome</div>
+    </div>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
     <div class="bg-animation"></div>
     <div class="scroll-indicator" id="scrollIndicator"></div>
 
@@ -386,8 +525,9 @@
                 <div class="role-text">Photographer</div>
                 <div class="role-text">Designer</div>
             </div>
-            <p style="font-size: 1.2rem; opacity: 0.8; margin-top: 20px;">
-                Creating digital experiences that inspire and captivate
+            <p class="hero-subtitle">
+                Transforming ideas into digital masterpieces through code, creativity, and innovation. 
+                Let's build something extraordinary together.
             </p>
         </div>
     </section>
@@ -396,10 +536,20 @@
         <h2>About Me</h2>
         <div class="glass about-content">
             <p>
-                I'm Ashish Newar, a passionate creative professional who bridges the gap between technology and artistry. 
-                With expertise in web development, photography, and design, I craft digital experiences that not only function 
-                flawlessly but also tell compelling visual stories. My journey spans across pixels and code, capturing moments 
-                and building dreams into reality.
+                Hello! I'm <span class="highlight">Ashish Newar</span>, a multidisciplinary creative professional 
+                with a passion for crafting digital experiences that leave lasting impressions.
+            </p>
+            <p>
+                With over <span class="highlight">5 years of experience</span> in web development, photography, 
+                and design, I've had the privilege of working with diverse clients across various industries. 
+                My approach combines technical expertise with artistic vision to create solutions that are both 
+                beautiful and functional.
+            </p>
+            <p>
+                I believe in the power of <span class="highlight">continuous learning</span> and staying at the 
+                forefront of technological advancements. Whether it's mastering new programming frameworks or 
+                experimenting with cutting-edge design tools, I'm always eager to expand my skillset and push 
+                creative boundaries.
             </p>
         </div>
     </section>
@@ -409,25 +559,44 @@
         <div class="works-grid">
             <div class="work-card glass">
                 <h3>🚀 Web Development</h3>
-                <p>Crafting responsive, modern websites and web applications using cutting-edge technologies. From concept to deployment, I build digital solutions that perform beautifully across all devices.</p>
+                <p>
+                    Specializing in creating responsive, performant websites and web applications 
+                    using modern technologies like React, Vue.js, and Node.js. From e-commerce 
+                    platforms to custom web solutions, I ensure every project is built with clean, 
+                    maintainable code and optimal user experience.
+                </p>
             </div>
             <div class="work-card glass">
                 <h3>📸 Photography</h3>
-                <p>Capturing life's precious moments through my lens. Specializing in portraits, landscapes, and event photography, I create visual narratives that speak to the soul.</p>
+                <p>
+                    With an eye for composition and lighting, I capture moments that tell compelling 
+                    stories. My expertise spans portrait photography, landscape shots, and event 
+                    coverage. Each photo is carefully edited to enhance its natural beauty while 
+                    maintaining authenticity.
+                </p>
             </div>
             <div class="work-card glass">
                 <h3>🎨 Design</h3>
-                <p>Creating stunning visual identities and user experiences. From logos to complete brand systems, I design with purpose, ensuring every element serves both form and function.</p>
+                <p>
+                    Creating visually stunning and user-centric designs is my passion. From brand 
+                    identity systems to UI/UX design, I focus on creating cohesive visual experiences 
+                    that align with business goals while delighting users. Every pixel is placed with 
+                    purpose and intention.
+                </p>
             </div>
         </div>
     </section>
 
     <section id="projects" class="section">
-        <h2>My Projects</h2>
+        <h2>Featured Projects</h2>
         <div class="projects-grid">
             <div class="project-card glass">
                 <h3>E-Commerce Platform</h3>
-                <p>A full-stack e-commerce solution with modern UI/UX, secure payment integration, and responsive design. Built for scalability and performance.</p>
+                <p>
+                    A full-featured online shopping platform with seamless user experience, 
+                    secure payment processing, and comprehensive admin dashboard. Built with 
+                    performance and scalability in mind, serving thousands of customers daily.
+                </p>
                 <div class="tech-stack">
                     <span class="tech-tag">React</span>
                     <span class="tech-tag">Node.js</span>
@@ -437,7 +606,11 @@
             </div>
             <div class="project-card glass">
                 <h3>Portfolio Dashboard</h3>
-                <p>An interactive dashboard for photographers to showcase their work, manage clients, and track bookings with elegant animations.</p>
+                <p>
+                    An elegant, interactive platform for photographers to showcase their work 
+                    and manage client relationships. Features include gallery management, 
+                    booking system, and client communication tools.
+                </p>
                 <div class="tech-stack">
                     <span class="tech-tag">Vue.js</span>
                     <span class="tech-tag">Firebase</span>
@@ -446,7 +619,11 @@
             </div>
             <div class="project-card glass">
                 <h3>Brand Identity System</h3>
-                <p>Complete visual identity design for a tech startup, including logo, color palette, typography, and brand guidelines.</p>
+                <p>
+                    Comprehensive brand identity design for a tech startup, including logo design, 
+                    typography selection, color palette development, and detailed brand guidelines 
+                    ensuring consistent visual communication across all platforms.
+                </p>
                 <div class="tech-stack">
                     <span class="tech-tag">Adobe CC</span>
                     <span class="tech-tag">Figma</span>
@@ -454,8 +631,12 @@
                 </div>
             </div>
             <div class="project-card glass">
-                <h3>Mobile App UI</h3>
-                <p>Modern mobile application interface design with smooth animations and intuitive user experience for a fitness tracking app.</p>
+                <h3>Fitness Tracking App</h3>
+                <p>
+                    Modern mobile application for fitness enthusiasts featuring workout tracking, 
+                    progress monitoring, and social features. The UI emphasizes ease of use while 
+                    maintaining a sleek, professional aesthetic.
+                </p>
                 <div class="tech-stack">
                     <span class="tech-tag">React Native</span>
                     <span class="tech-tag">UI/UX</span>
@@ -480,7 +661,7 @@
     </section>
 
     <section id="contact" class="section">
-        <h2>Get In Touch</h2>
+        <h2>Let's Connect</h2>
         <div class="contact-info">
             <div class="contact-card glass">
                 <span class="icon">📧</span>
@@ -506,6 +687,37 @@
     </section>
 
     <script>
+        // Custom cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+            
+            // Add slight delay to outline for smooth effect
+            setTimeout(() => {
+                cursorOutline.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+            }, 100);
+        });
+
+        // Hover effect on interactive elements
+        document.querySelectorAll('a, button, .gallery-item, .project-card, .work-card, .contact-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.border = '2px solid rgba(78, 205, 196, 0.8)';
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.border = '2px solid rgba(78, 205, 196, 0.5)';
+            });
+        });
+
         // Scroll indicator
         window.addEventListener('scroll', () => {
             const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
@@ -521,50 +733,22 @@
             });
         });
 
-        // Add interactive cursor effect
-        document.addEventListener('mousemove', (e) => {
-            const cursor = document.querySelector('.cursor') || createCursor();
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-
-        function createCursor() {
-            const cursor = document.createElement('div');
-            cursor.className = 'cursor';
-            cursor.style.cssText = `
-                position: fixed;
-                width: 20px;
-                height: 20px;
-                background: radial-gradient(circle, rgba(78, 205, 196, 0.6) 0%, transparent 70%);
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 9999;
-                transition: transform 0.1s ease;
-            `;
-            document.body.appendChild(cursor);
-            return cursor;
-        }
-
-        // Add scroll-triggered animations
+        // Intersection Observer for section animations
         const observerOptions = {
-            threshold: 0.1,
+            threshold: 0.2,
             rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.classList.add('visible');
                 }
             });
         }, observerOptions);
 
         // Observe all sections
         document.querySelectorAll('.section').forEach(section => {
-            section.style.opacity = '0';
-            section.style.transform = 'translateY(50px)';
-            section.style.transition = 'all 0.6s ease';
             observer.observe(section);
         });
 
@@ -579,6 +763,19 @@
                 element.style.transform = `translateY(${yPos}px) rotateZ(${scrolled * 0.1}deg)`;
             });
         });
+
+        // Role text animation
+        const roles = document.querySelectorAll('.role-text');
+        let currentRole = 0;
+
+        function showNextRole() {
+            roles.forEach(role => role.style.opacity = '0');
+            roles[currentRole].style.opacity = '1';
+            currentRole = (currentRole + 1) % roles.length;
+        }
+
+        showNextRole();
+        setInterval(showNextRole, 2000);
     </script>
 </body>
 </html>
